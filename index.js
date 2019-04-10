@@ -38,9 +38,9 @@ function run() {
         }
 
         const [bpm, duration] = program.shift();
-        beat.innerHTML = `${bpm} x ${duration}`;
+        beat.innerHTML = `${ bpm } x ${ duration }`;
 
-        console.log("Running", "BPM:", bpm, "Duration:", duration );
+        console.log("Running", "BPM:", bpm, "Duration:", duration);
         interval = setInterval(showBeat, 60000 / bpm);
         timer = setTimeout(runLine, duration * 1000);
     }
@@ -50,12 +50,12 @@ function run() {
 
 function showStart() {
     started = false;
-    start.innerHTML = 'start';
+    start.innerHTML = "start";
 }
 
 function showStop() {
     started = true;
-    start.innerHTML = 'stop';
+    start.innerHTML = "stop";
 }
 
 function getProgram() {
@@ -71,23 +71,21 @@ function showTotal(program) {
         totalBeats += (bpm * duration / 60);
     });
 
-    total.innerHTML = `${totalBeats} : ${totalDuration}`;
+    total.innerHTML = `${ totalBeats } : ${ totalDuration }`;
 }
 
 function update() {
-    setTimeout(() => {
-        localStorage.setItem("saved", settings.value);
-        showTotal(getProgram());
-    }, 0);
+    localStorage.setItem("saved", settings.value);
+    showTotal(getProgram());
 }
 
-settings.addEventListener("change", update);
-settings.addEventListener("keyup", update);
+settings.addEventListener("input", update);
+update();
 
 function showBeat() {
     console.log("bip");
     indicator.classList.add("on");
-    try { navigator.vibrate(40); }catch (e) {}
+    try { navigator.vibrate(40); } catch (e) {}
     setTimeout(() => indicator.classList.remove("on"), 100);
 }
 
