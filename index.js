@@ -9,10 +9,7 @@ let timer;
 let interval;
 let started = false;
 
-const saved = localStorage.getItem("saved");
-if (saved) {
-    settings.innerHTML = saved;
-}
+settings.value = localStorage.getItem("saved");
 
 function run() {
     timer = clearTimeout(timer);
@@ -80,7 +77,7 @@ function update() {
 }
 
 settings.addEventListener("input", update);
-update();
+setTimeout(update, 0);
 
 function showBeat() {
     console.log("bip");
