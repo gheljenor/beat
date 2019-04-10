@@ -25,8 +25,6 @@ function run() {
         showStop();
     }
 
-    localStorage.setItem("saved", settings.value);
-
     const program = getProgram();
     showTotal(program);
 
@@ -75,6 +73,16 @@ function showTotal(program) {
 
     total.innerHTML = `${totalBeats} : ${totalDuration}`;
 }
+
+function update() {
+    setTimeout(() => {
+        localStorage.setItem("saved", settings.value);
+        showTotal(getProgram());
+    }, 0);
+}
+
+settings.addEventListener("change", update);
+settings.addEventListener("keyup", update);
 
 function showBeat() {
     console.log("bip");
