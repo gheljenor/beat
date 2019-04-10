@@ -3,13 +3,11 @@ const start = document.querySelector(".start");
 const settings = document.querySelector(".settings");
 
 const beat = document.querySelector(".beat");
-const count = document.querySelector(".count");
+const total = document.querySelector(".total");
 
 let timer;
 let interval;
 let started = false;
-
-let counter = 0;
 
 const saved = localStorage.getItem("saved");
 if (saved) {
@@ -17,32 +15,31 @@ if (saved) {
 }
 
 function run() {
-    counter = 0;
     timer = clearTimeout(timer);
     interval = clearInterval(interval);
 
     if (started) {
-        started = false;
-        start.innerHTML = 'start';
+        showStart();
         return;
     } else {
-        started = true;
-        start.innerHTML = 'stop';
+        showStop();
     }
 
-    const program = settings.value.split("\n");
+    localStorage.setItem("saved", settings.value);
 
-    localStorage.setItem("saved", program);
+    const program = getProgram();
+    showTotal(program);
 
     function runLine() {
         showBeat();
         clearInterval(interval);
-        const [bpm, duration] = (program.shift() || "").split(" ");
-        if (!bpm) {
-            console.log("Done");
-            return;
+
+        if (!program.length) {
+            showStart();
+            return console.log("Done");
         }
 
+        const [bpm, duration] = program.shift();
         beat.innerHTML = `${bpm} x ${duration}`;
 
         console.log("Running", "BPM:", bpm, "Duration:", duration );
@@ -53,9 +50,34 @@ function run() {
     runLine();
 }
 
+function showStart() {
+    started = false;
+    start.innerHTML = 'start';
+}
+
+function showStop() {
+    started = true;
+    start.innerHTML = 'stop';
+}
+
+function getProgram() {
+    return settings.value.split("\n").map(v => v.split(" "));
+}
+
+function showTotal(program) {
+    let totalBeats = 0;
+    let totalDuration = 0;
+
+    program.forEach(([bpm, duration]) => {
+        totalDuration += +duration;
+        totalBeats += (bpm * duration / 60);
+    });
+
+    total.innerHTML = `${totalBeats} : ${totalDuration}`;
+}
+
 function showBeat() {
     console.log("bip");
-    count.innerHTML = ` [${counter++}]`;
     indicator.classList.add("on");
     try { navigator.vibrate(40); }catch (e) {}
     setTimeout(() => indicator.classList.remove("on"), 100);
