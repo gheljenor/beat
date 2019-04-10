@@ -7,15 +7,32 @@ const count = document.querySelector(".count");
 
 let timer;
 let interval;
+let started = false;
 
 let counter = 0;
+
+const saved = localStorage.getItem("saved");
+if (saved) {
+    settings.innerHTML = saved;
+}
 
 function run() {
     counter = 0;
     timer = clearTimeout(timer);
     interval = clearInterval(interval);
 
+    if (started) {
+        started = false;
+        start.innerHTML = 'start';
+        return;
+    } else {
+        started = true;
+        start.innerHTML = 'stop';
+    }
+
     const program = settings.value.split("\n");
+
+    localStorage.setItem("saved", program);
 
     function runLine() {
         showBeat();
@@ -40,7 +57,7 @@ function showBeat() {
     console.log("bip");
     count.innerHTML = ` [${counter++}]`;
     indicator.classList.add("on");
-    try { navigator.vibrate(60); }catch (e) {}
+    try { navigator.vibrate(40); }catch (e) {}
     setTimeout(() => indicator.classList.remove("on"), 100);
 }
 
