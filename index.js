@@ -9,6 +9,10 @@ const total = document.querySelector(".total");
 let timer;
 let interval;
 let started = false;
+let program;
+let line;
+let played;
+let ts;
 
 settings.value = localStorage.getItem("saved");
 
@@ -17,43 +21,76 @@ function run() {
     interval = clearInterval(interval);
 
     if (started) {
-        showStart();
+        showStopped();
         return;
     } else {
-        showStop();
+        showPlaying();
     }
 
-    const program = getProgram();
+    program = getProgram();
     showTotal(program);
 
-    function runLine() {
-        clearInterval(interval);
+    nextLine();
+}
 
-        if (!program.length) {
-            showStart();
-            return console.log("Done");
-        }
+function nextLine() {
+    clearInterval(interval);
 
-        const [bpm, duration] = program.shift();
-        beat.innerHTML = `${ bpm } x ${ duration }`;
-
-        console.log("Running", "BPM:", bpm, "Duration:", duration);
-
-        const beatDuration = 60000 / bpm;
-        indicator.style = `animation-duration: ${ beatDuration.toFixed(1) }ms;`;
-        interval = setInterval(showBeat, beatDuration);
-        timer = setTimeout(runLine, duration * 1000);
+    if (!program.length) {
+        showStopped();
+        line = null;
+        return console.log("Done");
     }
 
+    line = program.shift();
+    played = 0;
+
+    resume();
+}
+
+function runLine() {
+    const [bpm, duration] = line;
+    beat.innerHTML = `${ bpm } x ${ duration }`;
+
+    console.log("Running", "BPM:", bpm, "Duration:", duration, "Played:", played);
+
+    const beatDuration = 60000 / bpm;
+    indicator.style = `animation-duration: ${ beatDuration.toFixed(1) }ms;`;
+    interval = setInterval(showBeat, beatDuration);
+    timer = setTimeout(nextLine, duration * 1000 - played);
+}
+
+function toggle() {
+    if (!line) {
+        return run();
+    }
+
+    if (started) {
+        pause();
+    } else {
+        resume();
+    }
+}
+
+function pause() {
+    played += Date.now() - ts;
+    clearInterval(interval);
+    clearTimeout(timer);
+    showStopped();
+}
+
+function resume() {
+    ts = Date.now();
+    showPlaying();
     runLine();
 }
 
-function showStart() {
+function showStopped() {
     started = false;
     page.classList.remove("playing");
 }
 
-function showStop() {
+function showPlaying() {
     started = true;
     page.classList.add("playing");
 }
@@ -79,12 +116,13 @@ function update() {
     showTotal(getProgram());
 }
 
+function showBeat() {
+    console.log("bip");
+    try { navigator.vibrate(30); } catch (e) {}
+}
+
 settings.addEventListener("input", update);
 setTimeout(update, 0);
 
-function showBeat() {
-    console.log("bip");
-    try { navigator.vibrate(45); } catch (e) {}
-}
-
 start.addEventListener("click", run);
+indicator.addEventListener("click", toggle);
