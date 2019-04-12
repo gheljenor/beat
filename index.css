@@ -9,7 +9,7 @@ html, body {
     display: grid;
     height: 100%;
     grid-template-columns: auto;
-    grid-template-rows: 30% 10% 60%;
+    grid-template-rows: 30% 10% auto 20px;
     transition: grid-template-rows 0.5s ease;
 }
 
@@ -43,7 +43,14 @@ html, body {
     color: #666;
 }
 
-.playing.page { grid-template-rows: 90% 10% 0; }
+.legal, .legal a {
+    color: #999;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.playing.page { grid-template-rows: auto 10% 0 20px; }
 
 .playing .indicator { animation-play-state: running; }
 .playing .started { display: inline; }

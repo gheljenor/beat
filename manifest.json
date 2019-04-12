@@ -1,0 +1,21 @@
+{
+  "short_name": "beat",
+  "name": "Beat Maker",
+  "start_url": "./",
+  "background_color": "#999",
+  "display": "standalone",
+  "theme_color": "#999",
+  "orientation": "portrait",
+  "icons": [{
+    "type": "image/svg",
+    "src": "/beat/icon.svg"
+  }, {
+    "type": "image/png",
+    "src": "/beat/icon-128.png",
+    "sizes": "128x128"
+  }, {
+    "type": "image/png",
+    "src": "/beat/icon-512.png",
+    "sizes": "512x512"
+  }]
+}
