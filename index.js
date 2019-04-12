@@ -1,3 +1,4 @@
+const page = document.querySelector(".page");
 const indicator = document.querySelector(".indicator");
 const start = document.querySelector(".start");
 const settings = document.querySelector(".settings");
@@ -26,7 +27,6 @@ function run() {
     showTotal(program);
 
     function runLine() {
-        showBeat();
         clearInterval(interval);
 
         if (!program.length) {
@@ -38,7 +38,10 @@ function run() {
         beat.innerHTML = `${ bpm } x ${ duration }`;
 
         console.log("Running", "BPM:", bpm, "Duration:", duration);
-        interval = setInterval(showBeat, 60000 / bpm);
+
+        const beatDuration = 60000 / bpm;
+        indicator.style = `animation-duration: ${ beatDuration.toFixed(1) }ms;`;
+        interval = setInterval(showBeat, beatDuration);
         timer = setTimeout(runLine, duration * 1000);
     }
 
@@ -47,12 +50,12 @@ function run() {
 
 function showStart() {
     started = false;
-    start.innerHTML = "start";
+    page.classList.remove("playing");
 }
 
 function showStop() {
     started = true;
-    start.innerHTML = "stop";
+    page.classList.add("playing");
 }
 
 function getProgram() {
@@ -81,9 +84,7 @@ setTimeout(update, 0);
 
 function showBeat() {
     console.log("bip");
-    indicator.classList.add("on");
-    try { navigator.vibrate(40); } catch (e) {}
-    setTimeout(() => indicator.classList.remove("on"), 100);
+    try { navigator.vibrate(45); } catch (e) {}
 }
 
 start.addEventListener("click", run);

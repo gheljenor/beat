@@ -2,6 +2,7 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    background: #ccc;
 }
 
 .page {
@@ -9,6 +10,21 @@ html, body {
     height: 100%;
     grid-template-columns: auto;
     grid-template-rows: 30% 10% 60%;
+    transition: grid-template-rows 0.5s ease;
+}
+
+.indicator {
+    will-change: background;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    color: #999;
+    background: #fff;
+    font-size: 6vh;
+    font-weight: bold;
+    animation: bip infinite ease-in-out;
+    animation-play-state: paused;
 }
 
 .start {
@@ -18,23 +34,26 @@ html, body {
     border: none;
     outline: none;
 }
-
-.indicator {
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    color: #999;
-    font-size: 6vh;
-    font-weight: bold;
-}
-
-.indicator.on {
-    background: #000;
-}
+.started { display: none; }
 
 .settings {
     outline: none;
     font-size: 3vh;
     padding: 1vh;
+    color: #666;
+}
+
+.playing.page { grid-template-rows: 90% 10% 0; }
+
+.playing .indicator { animation-play-state: running; }
+.playing .started { display: inline; }
+.playing .stopped { display: none; }
+.playing .settings { display: none; }
+
+@keyframes bip {
+    from { background: #ccc; transform: scale(0.5); }
+    25% { background: #ccc; }
+    50% {background: #fff; transform: scale(1); }
+    75% { background: #ccc; }
+    to { background: #ccc; transform: scale(0.5); }
 }
