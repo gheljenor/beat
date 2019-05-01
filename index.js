@@ -71,7 +71,7 @@ function nextLine() {
 }
 
 function runLine() {
-    const [bpm, duration, targetBpm] = line;
+    const [duration, bpm, targetBpm] = line;
 
     console.log(
         "Running", "BPM:", bpm,
@@ -94,7 +94,7 @@ function tick() {
     played += lastBeat;
     ts = now;
 
-    const [fromBpm, duration, target] = line;
+    const [duration, fromBpm, target] = line;
 
     const toBpm = target || fromBpm;
 

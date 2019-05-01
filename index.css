@@ -58,7 +58,7 @@ html, body {
 .version {
     position: absolute;
     right: 10px;
-    bottom: 0;
+    top: 0;
 }
 
 .playing.page { grid-template-rows: auto 10% 0 20px; }
