@@ -18,6 +18,9 @@ const settings = document.querySelector(".settings");
 
 const beat = document.querySelector(".beat");
 const total = document.querySelector(".total");
+const version = document.querySelector(".version");
+
+version.innerHTML = '0.0.3';
 
 let timer;
 let interval;
@@ -102,7 +105,7 @@ function tick() {
     const currentBpm = parseInt(fromBpm) + (played / durationMs) * (toBpm - fromBpm);
     const beatDuration = 60000 / (currentBpm + 1);
 
-    beat.innerHTML = `${ currentBpm.toFixed(1) } x ${ (duration - played / 1000).toFixed(1) }`;
+    beat.innerHTML = `${ currentBpm.toFixed(1) } / ${ formatTime(duration - played / 1000) }`;
 
     indicator.style = "animation: none;";
     indicator.offsetWidth;
@@ -169,14 +172,14 @@ function showTotal(program) {
     let totalBeats = 0;
     let totalDuration = 0;
 
-    program.forEach(([bpm, duration, to]) => {
+    program.forEach(([duration, bpm, to]) => {
         if (!isFinite(bpm)) { return; }
         const target = to || bpm;
         totalDuration += +duration;
         totalBeats += ((+bpm + +target) * duration / 120);
     });
 
-    total.innerHTML = `${ totalBeats } : ${ totalDuration }`;
+    total.innerHTML = `Total: ${ totalBeats } / ${ formatTime(totalDuration) } `;
 }
 
 function update() {
@@ -191,6 +194,10 @@ function shuffle(lines) {
         result.push(lines.splice(i, 1)[0]);
     }
     return result;
+}
+
+function formatTime(duration) {
+    return (duration / 60).toFixed() + ":" + (Math.floor(duration) % 60);
 }
 
 indicator.addEventListener("animationiteration", tick);
