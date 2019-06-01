@@ -1,4 +1,4 @@
-const CACHE_NAME = "beat-maker-cache-v1";
+const CACHE_NAME = "beat-maker-cache-v2";
 
 const urlsToCache = [
     "/beat",
@@ -10,7 +10,7 @@ const urlsToCache = [
 ];
 
 self.addEventListener("install", function(event) {
-    console.log('Installing v1');
+    console.log('Installing v2');
 
     // Perform install steps
     event.waitUntil(

@@ -3,7 +3,7 @@ if ("serviceWorker" in navigator) {
         .then(function(registration) {
             // Registration was successful
             console.log("ServiceWorker registration successful with scope: ", registration.scope);
-            registration.update();
+            registration.update().then(() => console.log('updated'));
         }, function(err) {
             // registration failed :(
             console.log("ServiceWorker registration failed: ", err);
@@ -20,7 +20,7 @@ const beat = document.querySelector(".beat");
 const total = document.querySelector(".total");
 const version = document.querySelector(".version");
 
-version.innerHTML = '0.0.3';
+version.innerHTML = '0.0.4';
 
 let timer;
 let interval;
@@ -197,7 +197,11 @@ function shuffle(lines) {
 }
 
 function formatTime(duration) {
-    return (duration / 60).toFixed() + ":" + (Math.floor(duration) % 60);
+    return Math.floor(duration / 60) + ":" + pad(Math.floor(duration) % 60);
+}
+
+function pad(num) {
+    return num < 10 ? '0' + num : num;
 }
 
 indicator.addEventListener("animationiteration", tick);
